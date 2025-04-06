@@ -1,4 +1,3 @@
-
 import { Controller, Get, Req } from '@nestjs/common';
 import { Request } from 'express';
 
@@ -6,6 +5,13 @@ import { Request } from 'express';
 export class CatsController {
   @Get()
   findAll(@Req() request: Request): string {
-    return 'This action returns all cats: ' + request.query.name;
+    const name = request.query.name;
+    const nameStr =
+      typeof name === 'string'
+        ? name
+        : Array.isArray(name)
+          ? name.map(String).join(', ')
+          : '';
+    return 'This action returns all cats: ' + nameStr;
   }
 }

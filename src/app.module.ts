@@ -8,7 +8,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // supaya bisa diakses di mana saja
-    })
+    }),
   ],
   controllers: [AppController, CatsController],
   providers: [AppService],
