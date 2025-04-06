@@ -1,0 +1,36 @@
+FROM php:8.4-fpm
+
+WORKDIR /var/www
+
+# Install dependencies dan ekstensi PHP yang diperlukan
+RUN apt-get update && apt-get install -y \
+    procps util-linux git unzip zip libpng-dev libjpeg-dev libfreetype6-dev libzip-dev \
+    && docker-php-ext-install pdo_mysql gd zip pcntl sockets
+
+# Copy Composer dari image resmi
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy seluruh project ke dalam container
+COPY . /var/www
+
+# Copy konfigurasi PHP kustom
+COPY docker/custom-php.ini /usr/local/etc/php/php.ini
+COPY docker/www.conf /usr/local/etc/php-fpm.d/www.conf
+
+# Install Node.js dan npm
+RUN apt update && apt install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt install -y nodejs
+
+RUN npm install -g npm \
+    && npm install -g pnpm \
+    && npm install -g pm2 yarn
+
+# Install dependencies PHP dengan Composer
+RUN composer install --no-dev --optimize-autoloader
+
+RUN chmod -R u+rwX,go+rX,go-w /var/www/
+RUN chmod -R 777 /var/www/storage/
+
+EXPOSE 9000
+CMD ["php-fpm"]
