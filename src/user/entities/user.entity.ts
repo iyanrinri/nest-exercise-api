@@ -15,6 +15,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ length: 30 })
+  role: string;
+
   @Column({ type: 'timestamp' })
   created_at: Date;
 

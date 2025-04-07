@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { IsNull, Repository, Brackets } from 'typeorm';
 import { Request } from 'express';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -14,8 +15,20 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    if (createUserDto.password) {
+      const saltRounds = 10;
+      createUserDto.password = await bcrypt.hash(
+        createUserDto.password,
+        saltRounds,
+      );
+    }
+    const userData: Partial<User> = {
+      ...createUserDto,
+      role: 'USER',
+    };
+    const user = this.userRepository.create(userData);
+    return await this.userRepository.save(user);
   }
 
   findAll() {
@@ -23,15 +36,33 @@ export class UserService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    let qb = this.userRepository.createQueryBuilder('user');
+    qb = qb.where({
+      id: id,
+      deleted_at: IsNull(),
+    });
+    return qb.getOne();
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    Object.assign(user, updateUserDto);
+    return await this.userRepository.save(user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    user.deleted_at = new Date();
+    const updatedUser = await this.userRepository.save(user);
+    return {
+      message: 'User deleted successfully',
+    };
   }
 
   async paginateResultsByRequest(request: Request) {
@@ -53,8 +84,9 @@ export class UserService {
       );
     }
 
+    qb = qb.where('user.deleted_at IS NULL');
     qb = qb.skip(skip).take(take).orderBy('user.created_at', 'DESC');
-    console.log(qb.getSql());
+    // console.log(qb.getSql());
     const [data, total] = await qb.getManyAndCount();
     return {
       data,
