@@ -12,6 +12,7 @@ async function bootstrap() {
     .setTitle('Nest API')
     .setDescription('The Nest API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const options: SwaggerDocumentOptions = {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
@@ -24,6 +25,7 @@ async function bootstrap() {
         req.headers['accept'] = 'application/json';
         return req;
       },
+      persistAuthorization: true,
     },
   });
   SwaggerModule.setup('api', app, document);

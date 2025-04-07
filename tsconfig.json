@@ -1,4 +1,8 @@
 {
+  "include": [
+    "src/**/*",
+    "src/types/**/*.d.ts"
+  ],
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,

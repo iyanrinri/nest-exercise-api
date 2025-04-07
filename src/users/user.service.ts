@@ -44,6 +44,15 @@ export class UserService {
     return qb.getOne();
   }
 
+  findOneByEmail(email: string) {
+    let qb = this.userRepository.createQueryBuilder('user');
+    qb = qb.where({
+      email: email,
+      deleted_at: IsNull(),
+    });
+    return qb.getOne();
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(id);
     if (!user) {
