@@ -1,16 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { CatsController } from './cat.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { UserController } from './user/user.controller';
+import { AppConfigModule } from '../config/config.module';
+import { DatabaseModule } from '../database/database.module';
+import { UserModule } from './user/user.module';
+import { DataSource } from 'typeorm';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true, // supaya bisa diakses di mana saja
-    }),
-  ],
-  controllers: [AppController, CatsController],
+  imports: [AppConfigModule, DatabaseModule, UserModule],
+  controllers: [AppController, UserController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}
