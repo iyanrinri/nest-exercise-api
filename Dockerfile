@@ -1,5 +1,5 @@
 # Stage 1: Build the app
-FROM node:22-alpine as builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 RUN yarn config set registry https://registry.npmjs.org
@@ -20,4 +20,4 @@ RUN yarn install --production --network-concurrency 2
 
 COPY --from=builder /app/dist ./dist
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/main.js"]
