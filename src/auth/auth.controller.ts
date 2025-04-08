@@ -26,16 +26,16 @@ export class AuthController {
   @ApiBody({ type: SignInDto })
   signIn(@Body() signInDto: SignInDto) {
     // this.logger.log(`Sign in request: ${JSON.stringify(signInDto)}`);
-    // void this.emailService
-    //   .sendEmail(
-    //     'mohamad.nurdiansyah@mediawave.co.id',
-    //     'Test',
-    //     '',
-    //     '<b>wow amazing</b>',
-    //   )
-    //   .then((info) => {
-    //     console.log(info);
-    //   });
+    const data = {
+      name: 'Moamad Nurdiansyah',
+      subject: 'testing email',
+      message: 'this is a test email',
+    };
+    void this.emailService
+      .sendEmail('mohamad.nurdiansyah@mediawave.co.id', 'Test', '', data)
+      .then((info) => {
+        console.log(info);
+      });
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 }

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{subject}}</title>
+</head>
+<body>
+  {{#if name}}
+    <b>Hello, {{name}}!</b>
+  {{else}}
+    <b>Hello!</b>
+  {{/if}}
+
+  <p>{{message}}</p>
+
+  {{#if link}}
+    <p>Click <a href="{{link}}">here</a> to view the link.</p>
+  {{/if}}
+
+  {{#if verificationLink}}
+    <p>To verify your email address, please click the link below:</p>
+    <a href="{{verificationLink}}">{{verificationLink}}</a>
+  {{/if}}
+</body>
+</html>

@@ -5,6 +5,9 @@
 // src/email/email.service.ts
 import { Injectable } from '@nestjs/common';
 import { createTransport } from 'nodemailer';
+import * as path from 'path';
+import * as fs from 'fs';
+import * as handlebars from 'handlebars';
 
 @Injectable()
 export class EmailService {
@@ -20,7 +23,23 @@ export class EmailService {
     });
   }
 
-  async sendEmail(to: string, subject: string, text: string, html: string) {
+  async sendEmail(
+    to: string,
+    subject: string,
+    text: string,
+    data: object,
+    templateName?: string,
+  ) {
+    templateName = templateName || 'default';
+    const templatePath = path.join(
+      process.cwd(),
+      'templates',
+      `${templateName}.hbs`,
+    );
+    const templateSource = fs.readFileSync(templatePath, 'utf8');
+    const compiledTemplate = handlebars.compile(templateSource);
+    const html = compiledTemplate(data);
+
     const mailOptions = {
       from: `"${process.env.MAIL_FROM_NAME}" <${process.env.MAIL_FROM}>`,
       to,
