@@ -2,6 +2,7 @@
 FROM node:22-alpine as builder
 
 WORKDIR /app
+RUN yarn config set registry https://registry.npmjs.org
 COPY package*.json ./
 RUN yarn install
 COPY . .
@@ -11,6 +12,7 @@ RUN yarn run build
 FROM node:22-alpine
 
 WORKDIR /app
+RUN yarn config set registry https://registry.npmjs.org
 COPY package*.json ./
 RUN yarn install --production
 
