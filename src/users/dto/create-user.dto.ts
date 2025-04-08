@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, Length } from 'class-validator';
-import { IsString } from 'class-validator';
+import { IsString, IsEmail, Length } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'John Doe', required: true })

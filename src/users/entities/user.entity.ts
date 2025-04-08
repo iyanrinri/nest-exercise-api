@@ -1,6 +1,5 @@
-// src/user/entities/user.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Merchant } from 'src/merchants/entities/merchant.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
@@ -29,4 +28,7 @@ export class User {
 
   @Column({ type: 'timestamp', nullable: true })
   deleted_at: Date;
+
+  @OneToMany(() => Merchant, (merchant) => merchant.user)
+  merchants: Merchant[];
 }

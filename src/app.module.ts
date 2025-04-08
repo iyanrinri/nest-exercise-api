@@ -9,9 +9,10 @@ import { UserModule } from './users/user.module';
 import { DataSource } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
+import { MerchantsModule } from './merchants/merchants.module';
 
 @Module({
-  imports: [AppConfigModule, DatabaseModule, UserModule, AuthModule],
+  imports: [AppConfigModule, DatabaseModule, UserModule, AuthModule, MerchantsModule],
   controllers: [AppController, UsersController, UserController],
   providers: [AppService],
 })

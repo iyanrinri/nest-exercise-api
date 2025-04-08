@@ -102,7 +102,7 @@ export class UserService {
     qb = qb.skip(skip).take(take).orderBy('user.created_at', 'DESC');
     // console.log(qb.getSql());
     const [data, total] = await qb.getManyAndCount();
-    if (query.paginated == '1') {
+    if (query.paginated != '1') {
       return data;
     }
     return {
