@@ -7,4 +7,3 @@ docker-compose.yml
 README.md
 build.env
 node_modules
-dist

@@ -3,6 +3,8 @@ version: '3.8'
 services:
   nest-api-app:
     build: .
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
     container_name: nest-api-app
     ports:
       - "${PORT}:3000"
