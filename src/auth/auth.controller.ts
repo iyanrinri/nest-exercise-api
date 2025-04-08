@@ -25,7 +25,7 @@ export class AuthController {
   @Post('login')
   @ApiBody({ type: SignInDto })
   signIn(@Body() signInDto: SignInDto) {
-    // this.logger.log(`Sign in request: ${JSON.stringify(signInDto)}`);
+    this.logger.log(`Sign in request: ${JSON.stringify(signInDto)}`);
     const data = {
       name: 'Moamad Nurdiansyah',
       subject: 'testing email',

@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { WinstonModuleOptions } from 'nest-winston';
+import * as path from 'path';
 import * as winston from 'winston';
-
+import 'winston-daily-rotate-file';
 const { combine, timestamp, printf } = winston.format;
 
 const myFormat = printf(({ level, message, timestamp }) => {
@@ -35,8 +37,13 @@ export const loggerConfig: WinstonModuleOptions = {
     myFormat,
   ),
   transports: [
-    new winston.transports.File({
-      filename: 'storage/logs/app.log',
+    new winston.transports.DailyRotateFile({
+      dirname: path.join(process.cwd(), 'storage', 'logs'),
+      filename: 'app-%DATE%.log', // <- bikin log harian
+      datePattern: 'YYYY-MM-DD',
+      zippedArchive: false,
+      maxSize: '20m',
+      maxFiles: '7d',
       level: 'info',
     }),
     new winston.transports.Console(),
