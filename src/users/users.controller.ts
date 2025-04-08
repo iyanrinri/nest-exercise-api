@@ -42,6 +42,7 @@ export class UsersController {
   @ApiQuery({ name: 'query', required: false, type: String })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'perPage', required: false, type: Number })
+  @ApiQuery({ name: 'paginated', required: false, type: Number })
   @ApiBearerAuth()
   async findAll(@Req() request: Request): Promise<any> {
     return this.userService.paginateResultsByRequest(request);

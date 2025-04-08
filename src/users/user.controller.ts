@@ -1,4 +1,4 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { UserService } from './user.service';
 import {
@@ -7,9 +7,11 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { VerifiedGuard } from 'src/auth/guards/verified.guard';
 
 @Controller('user')
 @ApiTags('User')
+@UseGuards(VerifiedGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -28,6 +30,7 @@ export class UserController {
         id: reqUser.sub,
         name: reqUser.email,
         role: reqUser?.role || 'USER',
+        email_verified_at: reqUser?.email_verified_at || null,
       },
     };
   }

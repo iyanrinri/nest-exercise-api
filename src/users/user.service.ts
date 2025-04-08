@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
+  private readonly users: User[] = [];
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -31,8 +32,12 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  findAll() {
-    return this.userRepository.find();
+  async findAll() {
+    const users = await this.userRepository.find();
+    users.forEach((user) => {
+      this.users.push(user);
+    });
+    return this.users;
   }
 
   findOne(id: number) {
@@ -97,6 +102,9 @@ export class UserService {
     qb = qb.skip(skip).take(take).orderBy('user.created_at', 'DESC');
     // console.log(qb.getSql());
     const [data, total] = await qb.getManyAndCount();
+    if (query.paginated == '1') {
+      return data;
+    }
     return {
       data,
       total,

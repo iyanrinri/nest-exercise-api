@@ -18,6 +18,9 @@ export class User {
   @Column({ length: 30 })
   role: string;
 
+  @Column({ type: 'timestamp', nullable: true })
+  email_verified_at: Date;
+
   @Column({ type: 'timestamp' })
   created_at: Date;
 
