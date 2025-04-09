@@ -28,7 +28,8 @@ export class UserController {
     return {
       data: {
         id: reqUser.sub,
-        name: reqUser.email,
+        name: reqUser.name,
+        email: reqUser.email,
         role: reqUser?.role || 'USER',
         email_verified_at: reqUser?.email_verified_at || null,
       },
