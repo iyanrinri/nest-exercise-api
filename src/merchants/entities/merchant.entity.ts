@@ -22,6 +22,9 @@ export class Merchant {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
+  @Column({ type: 'timestamp' })
+  created_at: Date;
+
   @Column({ type: 'timestamp', nullable: true })
   updated_at: Date;
 

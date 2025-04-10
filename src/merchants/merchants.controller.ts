@@ -22,7 +22,6 @@ import { Request } from 'express';
 import { Roles } from 'src/common/decorators/role.decorator';
 
 @Controller('merchants')
-@Roles('ADMIN')
 export class MerchantsController {
   constructor(private readonly merchantsService: MerchantsService) {}
 
@@ -33,7 +32,19 @@ export class MerchantsController {
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  create(@Body() createDto: CreateMerchantDto) {
+  @Roles('USER')
+  create(@Body() createDto: CreateMerchantDto, @Req() request: Request) {
+    const reqUser = request.user ? request.user : null;
+    if (!reqUser) {
+      return { message: 'Unauthorized' };
+    }
+    if (reqUser.role == 'ADMIN') {
+      const body = request.body as { user_id: string | number };
+      createDto.user_id = parseInt(String(body.user_id));
+    } else {
+      createDto.user_id = parseInt(String(reqUser.sub));
+    }
+    console.log(createDto);
     return this.merchantsService.create(createDto);
   }
 
@@ -52,20 +63,36 @@ export class MerchantsController {
 
   @Get(':id')
   @ApiBearerAuth()
-  findOne(@Param('id') id: number) {
-    return this.merchantsService.findOne(+id);
+  findOne(@Param('id') id: number, @Req() request: Request) {
+    const reqUser = request.user ? request.user : null;
+    if (!reqUser) {
+      return { message: 'Unauthorized' };
+    }
+    return this.merchantsService.findOne(+id, reqUser);
   }
 
   @Put(':id')
   @ApiBody({ type: UpdateMerchantDto })
   @ApiBearerAuth()
-  update(@Param('id') id: string, @Body() updateDto: UpdateMerchantDto) {
-    return this.merchantsService.update(+id, updateDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateDto: UpdateMerchantDto,
+    @Req() request: Request,
+  ) {
+    const reqUser = request.user ? request.user : null;
+    if (!reqUser) {
+      return { message: 'Unauthorized' };
+    }
+    return this.merchantsService.update(+id, updateDto, reqUser);
   }
 
   @Delete(':id')
   @ApiBearerAuth()
-  remove(@Param('id') id: string) {
-    return this.merchantsService.remove(+id);
+  remove(@Param('id') id: string, @Req() request: Request) {
+    const reqUser = request.user ? request.user : null;
+    if (!reqUser) {
+      return { message: 'Unauthorized' };
+    }
+    return this.merchantsService.remove(+id, reqUser);
   }
 }

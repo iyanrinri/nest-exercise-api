@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Length, IsNumber } from 'class-validator';
+import { IsString, Length, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateMerchantDto {
   @ApiProperty({ example: 'Merchant 1', required: true })
@@ -8,7 +8,7 @@ export class CreateMerchantDto {
   @Length(1, 100)
   name: string;
 
-  @ApiProperty({ example: 1, required: true })
   @IsNumber()
+  @IsOptional()
   user_id: number;
 }
