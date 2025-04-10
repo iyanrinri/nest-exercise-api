@@ -7,7 +7,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { ApiBody } from '@nestjs/swagger';
 import { SignInDto } from './dto/sign-in';
 import { Public } from '../common/decorators/public.decorator';
 import { EmailService } from 'src/email/email.service';
