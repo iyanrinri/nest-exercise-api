@@ -15,6 +15,8 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+
+  app.enableCors();
   setupSwagger(app);
   await app.listen(3000, '0.0.0.0');
 }
