@@ -10,7 +10,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(email: string, pass: string): Promise<any> {
+  async signIn(email: string, pass: string, _remember: boolean): Promise<any> {
     const user = await this.userService.findOneByEmail(email);
     if (!user) {
       throw new UnauthorizedException();
@@ -29,7 +29,9 @@ export class AuthService {
       email_verified_at: user.email_verified_at,
     };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.signAsync(payload, {
+        expiresIn: _remember == true ? '30d' : '1h',
+      }),
     };
   }
 }

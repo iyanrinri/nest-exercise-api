@@ -36,6 +36,6 @@ export class AuthController {
     //   .then((info) => {
     //     console.log(info);
     //   });
-    return this.authService.signIn(signInDto.email, signInDto.password);
+    return this.authService.signIn(signInDto.email, signInDto.password, signInDto.remember);
   }
 }

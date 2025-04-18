@@ -88,6 +88,8 @@ export class UserService {
 
     let qb = this.userRepository.createQueryBuilder('user');
 
+    qb = qb.where('user.deleted_at IS NULL');
+    qb = qb.skip(skip).take(take).orderBy('user.created_at', 'DESC');
     if (searchQuery) {
       qb = qb.andWhere(
         new Brackets((qb1) => {
@@ -98,9 +100,6 @@ export class UserService {
       );
     }
 
-    qb = qb.where('user.deleted_at IS NULL');
-    qb = qb.skip(skip).take(take).orderBy('user.created_at', 'DESC');
-    // console.log(qb.getSql());
     const [data, total] = await qb.getManyAndCount();
     if (query.paginated != '1') {
       return data;

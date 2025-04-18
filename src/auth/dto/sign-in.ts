@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail } from 'class-validator';
+import { IsBoolean, IsEmail } from 'class-validator';
 import { IsString } from 'class-validator';
 
 export class SignInDto {
@@ -11,4 +11,8 @@ export class SignInDto {
   @ApiProperty({ example: 'xxxx', required: true })
   @IsString()
   password: string;
+
+  @ApiProperty({ example: false, required: false })
+  @IsBoolean()
+  remember: boolean;
 }

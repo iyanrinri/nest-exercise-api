@@ -11,14 +11,6 @@ import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../common/decorators/public.decorator';
 import { UserPayload } from './interfaces/user-payload.interface';
 
-interface JwtPayload {
-  sub: number;
-  name: string;
-  email: string;
-  email_verified_at: string;
-  role: string;
-}
-
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(

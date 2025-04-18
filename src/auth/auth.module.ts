@@ -15,7 +15,7 @@ import { EmailService } from 'src/email/email.service';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '7d' },
+      signOptions: { expiresIn: '1h' },
     }),
   ],
   controllers: [AuthController],
