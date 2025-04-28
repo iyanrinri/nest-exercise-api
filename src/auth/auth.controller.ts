@@ -10,6 +10,8 @@ import { AuthService } from './auth.service';
 import { ApiBody } from '@nestjs/swagger';
 import { SignInDto } from './dto/sign-in';
 import { RegisterDto } from './dto/register.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Public } from '../common/decorators/public.decorator';
 import { EmailService } from 'src/email/email.service';
 
@@ -20,6 +22,24 @@ export class AuthController {
     private authService: AuthService,
     private readonly emailService: EmailService,
   ) {}
+
+  @Public()
+  @Post('forgot-password')
+  @ApiBody({ type: ForgotPasswordDto })
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(forgotPasswordDto.email);
+  }
+
+  @Public()
+  @Post('reset-password')
+  @ApiBody({ type: ResetPasswordDto })
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(
+      resetPasswordDto.token,
+      resetPasswordDto.password,
+      resetPasswordDto.password_confirmation,
+    );
+  }
 
   @Public()
   @Post('register')

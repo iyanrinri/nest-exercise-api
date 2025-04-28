@@ -58,6 +58,15 @@ export class UserService {
     return qb.getOne();
   }
 
+  findOneByResetToken(token: string) {
+    let qb = this.userRepository.createQueryBuilder('user');
+    qb = qb.where({
+      reset_token: token,
+      deleted_at: IsNull(),
+    });
+    return qb.getOne();
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(id);
     if (!user) {

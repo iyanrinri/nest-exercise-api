@@ -29,6 +29,12 @@ export class User {
   @Column({ type: 'timestamp', nullable: true })
   deleted_at: Date;
 
+  @Column({ nullable: true, type: 'varchar' })
+  reset_token: string | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  reset_token_expires: Date | null;
+
   @OneToMany(() => Merchant, (merchant) => merchant.user)
   merchants: Merchant[];
 }
