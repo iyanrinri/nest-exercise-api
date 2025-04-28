@@ -9,6 +9,7 @@ import {
 import { AuthService } from './auth.service';
 import { ApiBody } from '@nestjs/swagger';
 import { SignInDto } from './dto/sign-in';
+import { RegisterDto } from './dto/register.dto';
 import { Public } from '../common/decorators/public.decorator';
 import { EmailService } from 'src/email/email.service';
 
@@ -19,6 +20,18 @@ export class AuthController {
     private authService: AuthService,
     private readonly emailService: EmailService,
   ) {}
+
+  @Public()
+  @Post('register')
+  @ApiBody({ type: RegisterDto })
+  async register(@Body() registerDto: RegisterDto) {
+    return this.authService.register(
+      registerDto.email,
+      registerDto.name,
+      registerDto.password,
+      registerDto.password_confirmation,
+    );
+  }
 
   @Public()
   @HttpCode(HttpStatus.OK)
